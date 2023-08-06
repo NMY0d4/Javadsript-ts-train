@@ -1,16 +1,29 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { Orelega_One } from 'next/font/google';
+import { NextResponse } from 'next/server';
+
+const allowedOrigins =
+  process.env.NODE_ENV === 'production'
+    ? ['https://www.yoursite.com', 'https://www.anothersite.com']
+    : ['http://localhost:3000', 'https://www.google.com'];
 
 export function middleware(request: Request) {
-  const regex = new RegExp('/api/*');
+  const origin = request.headers.get('origin');
 
-  if (request.url.includes('/api/')) {
+  console.log(allowedOrigins, origin);
+  if (origin && !allowedOrigins.includes(origin)) {
+    return new NextResponse(null, {
+      status: 400,
+      statusText: 'ICI Bad Request',
+      headers: {
+        'Content-Type': 'text/plain',
+      },
+    });
   }
   console.log('Middleware');
 
   console.log(request.method);
   console.log(request.url);
 
-  const origin = request.headers.get('origin');
   console.log(origin);
   return NextResponse.next();
 }
