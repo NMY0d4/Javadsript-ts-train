@@ -1,6 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 export function middleware(request: Request) {
+  const regex = new RegExp('/api/*');
+
+  if (request.url.includes('/api/')) {
+  }
   console.log('Middleware');
 
   console.log(request.method);
@@ -10,3 +14,7 @@ export function middleware(request: Request) {
   console.log(origin);
   return NextResponse.next();
 }
+
+export const config = {
+  matcher: '/api/:path*',
+};
